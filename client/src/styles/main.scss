@@ -1,0 +1,16 @@
+@use "sass:math";
+@use "sass:map";
+@use "./lib/variables" as variables;
+@use "./lib/mixins" as mixins;
+
+html {
+    font-family: "Brainlab Now", sans-serif;
+    $min_width: map.get(variables.$configs, 'min_width');
+    $max_width: map.get(variables.$configs, 'max_width');
+    $min_font: map.get(variables.$configs, 'min_font');
+    $max_font: map.get(variables.$configs, 'max_font');
+    @include mixins.fluid-type($min_width, $max_width, $min_font, $max_font);
+}
+body {
+    color: var(--p-surface-100);
+}

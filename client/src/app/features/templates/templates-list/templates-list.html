@@ -1,0 +1,22 @@
+<p-table [value]="vmodel()" [scrollable]="true" scrollHeight="flex" class="w-full h-full">
+    <ng-template #header>
+        <tr>
+            <th class="" scope="col"><div class=""><span class="">Name</span></div></th>
+            <th class="" scope="col"><div class=""><span class="">Region</span></div></th>
+            <th class="" scope="col"><div class=""><span class="">Procedure</span></div></th>
+            <th class="" scope="col"><div class=""><span class="">Classification</span></div></th>
+            <th class="" scope="col"><div class=""><span class="">Manufacturer</span></div></th>
+            <th class="" scope="col"><div class="min-w-8rem"><span class="">Message</span></div></th>
+        </tr>
+    </ng-template>
+    <ng-template #body let-template>
+        <tr>
+            <td class=""><div class=""><span class="">{{ template.name }}</span></div></td>
+            <td class=""><div class=""><span class="">{{ template.anatomicalRegion }}</span></div></td>
+            <td class=""><div class=""><span class="">{{ template.procedure }}</span></div></td>
+            <td class=""><div class=""><span class="">{{ template.classification }}</span></div></td>
+            <td class=""><div class=""><span class="">{{ template.manufacturer }}</span></div></td>
+            <td class=""><div class="min-w-8rem"><span class="">{{ template.message }}</span></div></td>
+        </tr>
+    </ng-template>
+</p-table>

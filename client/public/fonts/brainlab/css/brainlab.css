@@ -1,0 +1,13 @@
+@font-face {
+    font-family: "Brainlab Now";
+    src: url("../font/brainlabnow-regular.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Brainlab Now";
+    src: url("../font/brainlabnow-medium.ttf") format("truetype");
+    font-weight: bold;
+    font-style: normal;
+}

@@ -1,0 +1,19 @@
+{
+  "name": "tcn-qa",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "concurrently -n angular,electron -c blue,green \"npm run dev:client\" \"npm run dev:electron\"",
+    "dev": "concurrently -n angular,electron -c blue,green \"npm run dev:client\" \"npm run dev:electron\"",
+    "dev:client": "cd client && ng serve",
+    "dev:electron": "wait-on http://localhost:4208 && cd electron && npm run build && npm run dev",
+    "build": "npm run build:client && npm run build:electron",
+    "build:client": "cd client && ng build",
+    "build:electron": "cd electron && npm run build",
+    "package": "npm run build && cd electron && npm run package"
+  },
+  "devDependencies": {
+    "concurrently": "^9.0.0",
+    "wait-on": "^8.0.0"
+  }
+}

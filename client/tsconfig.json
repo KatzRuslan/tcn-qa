@@ -1,0 +1,43 @@
+/* To learn more about Typescript configuration file: https://www.typescriptlang.org/docs/handbook/tsconfig-json.html. */
+/* To learn more about Angular compiler options: https://angular.dev/reference/configs/angular-compiler-options. */
+{
+    "compileOnSave": false,
+    "compilerOptions": {
+        "strict": true,
+        "noImplicitOverride": true,
+        "noPropertyAccessFromIndexSignature": true,
+        "noImplicitReturns": true,
+        "noFallthroughCasesInSwitch": true,
+        "skipLibCheck": true,
+        "isolatedModules": true,
+        "experimentalDecorators": true,
+        "importHelpers": true,
+        "target": "ES2022",
+        "module": "preserve",
+        "paths": {
+            "@tcn-preset": ["./public/tcn-preset.json"],
+            "@environments": ["./src/environments/environment"],
+            "@shared-module": ["./src/app/shared/shared.module.ts"],
+            "@shared-helpers/*": ["./src/app/shared/helpers/*"],
+            "@app-store": ["./src/app/redux/app-store/app-store.store.ts"],
+            "@app-helper": ["./src/app/redux/app-store/app-store.helper.ts"],
+            "@settings-store": ["./src/app/redux/settings-store/settings-store.store.ts"],
+            "@settings-helper": ["./src/app/redux/settings-store/settings-store.helper.ts"],
+        }
+    },
+    "angularCompilerOptions": {
+        "enableI18nLegacyMessageIdFormat": false,
+        "strictInjectionParameters": true,
+        "strictInputAccessModifiers": true,
+        "strictTemplates": true
+    },
+    "files": [],
+    "references": [
+        {
+        "path": "./tsconfig.app.json"
+        },
+        {
+        "path": "./tsconfig.spec.json"
+        }
+    ]
+}

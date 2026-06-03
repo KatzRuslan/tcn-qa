@@ -1,0 +1,38 @@
+@use "sass:math";
+@use "./functions" as functions;
+
+@mixin fluid-type($min-vw, $max-vw, $min-font-size, $max-font-size) {
+    $u1: math.unit($min-vw);
+    $u2: math.unit($max-vw);
+    $u3: math.unit($min-font-size);
+    $u4: math.unit($max-font-size);
+
+    @if $u1 == $u2 and $u1 == $u3 and $u1 == $u4 {
+        & {
+            font-size: $min-font-size;
+            @media screen and (min-width: $min-vw) {
+                font-size: calc(#{$min-font-size} + #{functions.strip-unit($max-font-size - $min-font-size)} * ((100vw - #{$min-vw}) / #{functions.strip-unit($max-vw - $min-vw)}));
+            }
+            @media screen and (min-width: $max-vw) {
+                font-size: $max-font-size;
+            }
+        }
+    }
+}
+@mixin fluid-property-value($min-vw, $max-vw, $min-value, $max-value, $property, $f:1) {
+    $u1: math.unit($min-vw);
+    $u2: math.unit($max-vw);
+    $u3: math.unit($min-value);
+    $u4: math.unit($max-value);
+    @if $u1 == $u2 and $u1 == $u3 and $u1 == $u4 {
+        & {
+            #{$property}: $min-value * $f;
+            @media screen and (min-width: $min-vw) {
+                #{$property}: calc((#{$min-value} + #{functions.strip-unit($max-value - $min-value)} * ((100vw - #{$min-vw}) / #{functions.strip-unit($max-vw - $min-vw)})) * $f);
+            }
+            @media screen and (min-width: $max-vw) {
+                #{$property}: $max-value * $f;
+            }
+        }
+    }
+}
