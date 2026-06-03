@@ -117,7 +117,7 @@ export const Store = signalStore(
                                 store._check.set([...store._templates()]);
                                 updateState(store, '[TemplatesStore Set Total]', setTotal(store._templates().length));
                                 updateState(store, '[TemplatesStore Running]', setStatus('running'));
-                                // store.getFamily(); vremeno izolirovan - ne trogat'
+                                store.getFamily();// vremeno izolirovan - ne trogat'
                             })
                         )),
                 )
