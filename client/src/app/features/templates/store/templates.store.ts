@@ -3,7 +3,7 @@ import { signalStore, withState, withProps, withMethods, withComputed, withHooks
 import { updateState, withDevtools } from '@angular-architects/ngrx-toolkit';
 import { initialTemplatesSlice } from './templates.slice';
 import { getTemplates, getFamily, checkImages, initTemplatesStoreHelperContext } from './templates.helper';
-import { setTotal, pushFailed } from './templates.updates';
+import { setTotal, pushFailed, setStatus } from './templates.updates';
 import { vmImages, vmNoProperies, vmNotfounds } from './templates.vm-builder';
 import { HttpClient } from '@angular/common/http';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
@@ -35,17 +35,15 @@ export const Store = signalStore(
             const templates = store._check();
             const template = templates.pop();
             if (!template) {
-                console.log('images check done');
+                updateState(store, '[TemplatesStore Done]', setStatus('done'));
                 return;
             }
             store._check.set(templates);
             runInInjectionContext(store._injector, () => {
                 checkImages(template).subscribe(({ count404, total }) => {
-                    console.log({ count404, total })
                     if (count404 > 0) {
-                        console.log('**********');
-                        const details = [...(template.details ?? []), { status: 'IMG_404', message: `${count404}/${total} images 404` }];
-                        updateState(store, '[TemplatesStore Push Failed]', pushFailed({ ...template, details }));
+                        const issues = [...(template.issues ?? []), { status: 'IMG_404', message: `${count404}/${total} images 404` }];
+                        updateState(store, '[TemplatesStore Push Failed]', pushFailed({ ...template, issues }));
                     }
                     _imagesCheck();
                 });
@@ -60,7 +58,7 @@ export const Store = signalStore(
                     }
                 }
                 if (emptyPropertiesCounter) {
-                    updateState(store, '[TemplatesStore Push Failed]', pushFailed({ ...template, details: [{ status: 'EMPT_PROPS', message: `Empty properies ${emptyPropertiesCounter}/${template.implants.length}` }] }));
+                    updateState(store, '[TemplatesStore Push Failed]', pushFailed({ ...template, issues: [{ status: 'EMPT_PROPS', message: `Empty properies ${emptyPropertiesCounter}/${template.implants.length}` }] }));
                 }
             }
             store._check.set([...store._templates()]);
@@ -74,7 +72,6 @@ export const Store = signalStore(
                 store._templates.set([...successful]);
                 successful.length = 0;
                 _continueCheck();
-                console.log(store._templates().at(0))
                 return;
             }
             store._check.set(templates);
@@ -85,7 +82,7 @@ export const Store = signalStore(
                         _getFamily();
                     },
                     error: _ => {
-                        updateState(store, '[TemplatesStore Push Failed]', pushFailed({ ...template, details: [{ status: '404', message: 'Not found' }] }));
+                        updateState(store, '[TemplatesStore Push Failed]', pushFailed({ ...template, issues: [{ status: '404', message: 'Not found' }] }));
                         _getFamily();
                     }
                 });
@@ -100,6 +97,7 @@ export const Store = signalStore(
             notfounds: computed(() => vmNotfounds(store.faileds())),
             noproperties: computed(() => vmNoProperies(store.faileds())),
             noimages: computed(() => vmImages(store.faileds())),
+            isRunning: computed(() => store.status() === 'running'),
         }
     }),
 	withHooks({
@@ -117,8 +115,9 @@ export const Store = signalStore(
                             }),
                             finalize(() => {
                                 store._check.set([...store._templates()]);
-                                updateState(store, '[TemplatesStore Set Total]', setTotal(store._templates().length))
-                                // store.getFamily(); vremeno izolirovan
+                                updateState(store, '[TemplatesStore Set Total]', setTotal(store._templates().length));
+                                updateState(store, '[TemplatesStore Running]', setStatus('running'));
+                                // store.getFamily(); vremeno izolirovan - ne trogat'
                             })
                         )),
                 )

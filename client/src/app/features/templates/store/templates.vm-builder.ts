@@ -3,7 +3,7 @@ import { ITemplate } from '../templates.interface';
 export function vmNotfounds(faileds: ITemplate[]) {
     return faileds
         .map((template) => {
-            const details = template.details.find(({ status }) => status === '404');
+            const details = template.issues.find(({ status }) => status === '404');
             if (details) {
                 const { message } = details;
                 return { ...template, message }
@@ -15,7 +15,7 @@ export function vmNotfounds(faileds: ITemplate[]) {
 export function vmNoProperies(faileds: ITemplate[]) {
     return faileds
         .map((template) => {
-            const details = template.details.find(({ status }) => status === 'EMPT_PROPS');
+            const details = template.issues.find(({ status }) => status === 'EMPT_PROPS');
             if (details) {
                 const { message } = details;
                 return { ...template, message }
@@ -27,7 +27,7 @@ export function vmNoProperies(faileds: ITemplate[]) {
 export function vmImages(faileds: ITemplate[]) {
     return faileds
         .map((template) => {
-            const details = template.details.find(({ status }) => status === 'IMG_404');
+            const details = template.issues.find(({ status }) => status === 'IMG_404');
             if (details) {
                 const { message } = details;
                 return { ...template, message }

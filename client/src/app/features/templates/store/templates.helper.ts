@@ -1,7 +1,7 @@
 import { Signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { ITemplate } from '../templates.interface';
-import { catchError, throwError, map, forkJoin, of } from 'rxjs';
+import { catchError, throwError, map, mergeMap, from, of, toArray } from 'rxjs';
 
 /**
  * ⚠️ Singleton helper context.
@@ -24,7 +24,7 @@ export function getTemplates() {
     return ctx.httpClient.post<ITemplate[]>('templates/search', { freeText: '', procedures: [], anatomicalRegions: [], sortFactor: 0 }).pipe(
         map(templates => {
             if (Array.isArray(templates)) {
-                return templates.map(template => ({ ...template, details: []}));
+                return templates.map(template => ({ ...template, issues: [], details: [] }));
             }
             throw new Error(`getTemplates: expected array, got ${JSON.stringify(templates)}`);
         })
@@ -41,15 +41,16 @@ export function checkImages(template: ITemplate) {
         return of({ template, count404: 0, total: 0 });
     }
     //
-    const checks = images.map(({ imageLocation }) =>
-        ctx.httpClient.get(`templates/image/${imageLocation}`).pipe(
-            map(() => false),
-            catchError(() => of(true))
-        )
-    );
-    //
-    return forkJoin(checks).pipe(
-        map(results => ({
+    return from(images).pipe(
+        mergeMap(
+            ({ imageLocation }) => ctx.httpClient.get(`templates/image/${imageLocation}`).pipe(
+                map(() => false),
+                catchError(() => of(true))
+            ),
+            10
+        ),
+        toArray(),
+        map((results: boolean[]) => ({
             template,
             count404: results.filter(Boolean).length,
             total: images.length

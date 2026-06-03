@@ -9,9 +9,14 @@ export interface ITemplate {
     readonly possibleValues: IPossibleValues;
     readonly mainImplant: boolean;
     readonly mainSizeField: string;
-    readonly details: {
+    readonly issues: {
         readonly status: string;
         readonly message: string;
+    }[];
+    readonly details: {
+        readonly view: string;
+        readonly partNumber: string;
+        readonly properties: string;
     }[];
 }
 export interface IPossibleValues {
