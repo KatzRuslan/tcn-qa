@@ -15,10 +15,10 @@ export function vmNotfounds(faileds: ITemplate[]) {
 export function vmNoProperies(faileds: ITemplate[]) {
     return faileds
         .map((template) => {
-            const details = template.issues.find(({ status }) => status === 'EMPT_PROPS');
-            if (details) {
-                const { message } = details;
-                return { ...template, message }
+            const issue = template.issues.find(({ status }) => status === 'EMPT_PROPS');
+            if (issue) {
+                const { message } = issue;
+                return { ...template, message, details: template.details.filter(({ status }) => status === 'EMPT_PROPS') }
             }
             return undefined as unknown as ITemplate;
         })
@@ -27,10 +27,10 @@ export function vmNoProperies(faileds: ITemplate[]) {
 export function vmImages(faileds: ITemplate[]) {
     return faileds
         .map((template) => {
-            const details = template.issues.find(({ status }) => status === 'IMG_404');
-            if (details) {
-                const { message } = details;
-                return { ...template, message }
+            const issue = template.issues.find(({ status }) => status === 'IMG_404');
+            if (issue) {
+                const { message } = issue;
+                return { ...template, message, details: template.details.filter(({ status }) => status === 'IMG_404') }
             }
             return undefined as unknown as ITemplate;
         })

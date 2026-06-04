@@ -1,25 +1,18 @@
-<p-tabs value="0" class="w-full h-full overflow-hidden">
+<p-tabs value="1" class="w-full h-full overflow-hidden">
     <p-tablist class="min-h-4rem">
-        <p-tab value="0">Header I</p-tab>
-        <p-tab value="1">Header II</p-tab>
-        <p-tab value="2">Header III</p-tab>
-        <p-tab value="3">Header IV</p-tab>
+        <p-tab value="0">Not Found</p-tab>
+        <p-tab value="1">No Properties</p-tab>
+        <p-tab value="2">No Images</p-tab>
     </p-tablist>
     <p-tabpanels class="flex flex-column w-full h-full overflow-hidden">
         <p-tabpanel value="0" class="w-full h-full overflow-hidden">
-            <templates-list [vmodel]="store.notfounds()" />
+            <templates-list [vmodel]="store.notfounds()" [expansion]="false" />
         </p-tabpanel>
         <p-tabpanel value="1" class="w-full h-full overflow-hidden">
-            <templates-list [vmodel]="store.noproperties()" />
+            <templates-list [vmodel]="store.noproperties()" [expansion]="true" />
         </p-tabpanel>
         <p-tabpanel value="2" class="w-full h-full overflow-hidden">
-            <templates-list [vmodel]="store.noimages()" />
-        </p-tabpanel>
-        <p-tabpanel value="3" class="w-full h-full overflow-hidden">
-            <p class="m-0">
-                At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in
-                culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus.
-            </p>
+            <templates-list [vmodel]="store.noimages()" [expansion]="true" />
         </p-tabpanel>
     </p-tabpanels>
 </p-tabs>

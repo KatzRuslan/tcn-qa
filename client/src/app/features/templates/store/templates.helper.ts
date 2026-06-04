@@ -1,7 +1,7 @@
 import { Signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { ITemplate } from '../templates.interface';
-import { catchError, throwError, map, mergeMap, from, of, toArray } from 'rxjs';
+import { ICheckImage, ITemplate, ITemplateDetail, ITemplateIssue } from '../templates.interface';
+import { catchError, throwError, map, mergeMap, from, of, toArray, filter } from 'rxjs';
 
 /**
  * ⚠️ Singleton helper context.
@@ -32,28 +32,47 @@ export function getTemplates() {
 }
 export function getFamily(template: ITemplate) {
     return ctx.httpClient.post<ITemplate>('templates/family', { familyId: template.id, side: 'left', hasHipAP: true }).pipe(
+        map(({ implants }) => {
+            const issues: ITemplateIssue[] = [], checkImages: ICheckImage[] = [], details: ITemplateDetail[] = [];
+            let index = 0;
+            for (const { payload } of implants) {
+                const { partNumber, properties, images } = payload;
+                if (properties.length === 0) {
+                    details.push({ index, partNumber, status: 'EMPT_PROPS' });
+                }
+                checkImages.push(
+                    ...images.map(({ ImageID, view, imageLocation }) => ({
+                        index, partNumber, ImageID, view, imageLocation
+                    }))
+                );
+                index++;
+            }
+            if (details.length) {
+                issues.push({ status: 'EMPT_PROPS', message: `${details.length}/${implants.length}` })
+            }
+            return {
+                issues, details, images: checkImages
+            };
+        }),
         catchError(_ => throwError(() => template))
     );
 }
-export function checkImages(template: ITemplate) {
-    const images = template.implants.flatMap(i => i.payload.images);
-    if (!images.length) {
-        return of({ template, count404: 0, total: 0 });
-    }
-    //
+export function checkImages(images: ICheckImage[]) {
     return from(images).pipe(
         mergeMap(
-            ({ imageLocation }) => ctx.httpClient.get(`templates/image/${imageLocation}`).pipe(
-                map(() => false),
-                catchError(() => of(true))
+            image => ctx.httpClient.get(`templates/image/${image.imageLocation}`).pipe(
+                map(() => undefined as unknown as ICheckImage),
+                catchError(() => of(image))
             ),
             10
         ),
         toArray(),
-        map((results: boolean[]) => ({
-            template,
-            count404: results.filter(Boolean).length,
-            total: images.length
-        }))
+        map((results: ICheckImage[]) => {
+            const details = results.filter(Boolean).map(({index, ImageID, partNumber, view }) => ({index, ImageID, partNumber, view, status: 'IMG_404' }));
+            const issues = details.length ? [{ status: 'IMG_404', message: `${details.length}/${images.length}` }] : [];
+            return {
+                details, issues
+            }
+        })
     );
 }

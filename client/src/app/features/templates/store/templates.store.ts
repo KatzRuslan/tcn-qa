@@ -8,8 +8,8 @@ import { vmImages, vmNoProperies, vmNotfounds } from './templates.vm-builder';
 import { HttpClient } from '@angular/common/http';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { tapResponse } from '@ngrx/operators';
-import { ITemplate } from '../templates.interface';
-import { firstValueFrom, switchMap, pipe, finalize } from 'rxjs';
+import { ICheckImage, ITemplate, ITemplateDetail } from '../templates.interface';
+import { switchMap, pipe, finalize } from 'rxjs';
 //
 import { Store as AppStore } from '@app-store';
 
@@ -30,59 +30,42 @@ export const Store = signalStore(
 		}
 	}),
 	withMethods(store => {
-        const successful: ITemplate[] = [];
+        let chekimages: { template: ITemplate; images: ICheckImage[] }[] = [];
         const _imagesCheck = () => {
-            const templates = store._check();
-            const template = templates.pop();
-            if (!template) {
+            if (chekimages.length === 0) {
+                console.log('Completed');
                 updateState(store, '[TemplatesStore Done]', setStatus('done'));
                 return;
             }
-            store._check.set(templates);
+            const { template, images } = chekimages.pop()!;
             runInInjectionContext(store._injector, () => {
-                checkImages(template).subscribe(({ count404, total }) => {
-                    if (count404 > 0) {
-                        const issues = [...(template.issues ?? []), { status: 'IMG_404', message: `${count404}/${total} images 404` }];
-                        updateState(store, '[TemplatesStore Push Failed]', pushFailed({ ...template, issues }));
+                checkImages(images).subscribe(({ issues, details }) => {
+                    if (issues.length) {
+                        updateState(store, '[TemplatesStore Push Failed]', pushFailed({ ...template, issues, details }));
                     }
                     _imagesCheck();
                 });
             });
         };
-        const _continueCheck = () => {
-            for (const template of store._templates()) {
-                let emptyPropertiesCounter = 0;
-                for (const { payload } of template.implants) {
-                    if (payload.properties.length === 0) {
-                        emptyPropertiesCounter++;
-                    }
-                }
-                if (emptyPropertiesCounter) {
-                    updateState(store, '[TemplatesStore Push Failed]', pushFailed({ ...template, issues: [{ status: 'EMPT_PROPS', message: `Empty properies ${emptyPropertiesCounter}/${template.implants.length}` }] }));
-                }
-            }
-            store._check.set([...store._templates()]);
-            // store._check.set(mock); **************
-            _imagesCheck();
-        };
         const _getFamily = () => {
             const templates = store._check();
             const template = templates.pop();
-            if (!template) {
-                store._templates.set([...successful]);
-                successful.length = 0;
-                _continueCheck();
+            if (!template) {;
+                _imagesCheck();
                 return;
             }
             store._check.set(templates);
             runInInjectionContext(store._injector, () => {
                 getFamily(template).subscribe({
-                    next: family => {
-                        successful.push(family);
+                    next: ({ issues, details, images }) => {
+                        if (issues.length) {
+                            updateState(store, '[TemplatesStore Push Failed]', pushFailed({ ...template, issues, details }));
+                        }
+                        chekimages.push({ template, images });
                         _getFamily();
                     },
                     error: _ => {
-                        updateState(store, '[TemplatesStore Push Failed]', pushFailed({ ...template, issues: [{ status: '404', message: 'Not found' }] }));
+                        updateState(store, '[TemplatesStore Push Failed]', pushFailed({ ...template, issues: [{ status: '404', message: 'Not found' }], details: [] }));
                         _getFamily();
                     }
                 });
@@ -117,7 +100,7 @@ export const Store = signalStore(
                                 store._check.set([...store._templates()]);
                                 updateState(store, '[TemplatesStore Set Total]', setTotal(store._templates().length));
                                 updateState(store, '[TemplatesStore Running]', setStatus('running'));
-                                store.getFamily();// vremeno izolirovan - ne trogat'
+                                store.getFamily();
                             })
                         )),
                 )

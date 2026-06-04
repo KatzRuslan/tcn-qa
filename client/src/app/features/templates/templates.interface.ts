@@ -9,15 +9,19 @@ export interface ITemplate {
     readonly possibleValues: IPossibleValues;
     readonly mainImplant: boolean;
     readonly mainSizeField: string;
-    readonly issues: {
-        readonly status: string;
-        readonly message: string;
-    }[];
-    readonly details: {
-        readonly view: string;
-        readonly partNumber: string;
-        readonly properties: string;
-    }[];
+    readonly issues: ITemplateIssue[];
+    readonly details: ITemplateDetail[];
+}
+export interface ITemplateIssue {
+    readonly status: string;
+    readonly message: string;
+}
+export interface ITemplateDetail {
+    readonly index: number;
+    readonly ImageID?: string;
+    readonly view?: string;
+    readonly partNumber: string;
+    readonly status: string;
 }
 export interface IPossibleValues {
     readonly [key: string]: {
@@ -32,8 +36,7 @@ export interface ITemplateImplant {
     readonly id: string;
     readonly familyId: string;
     readonly payload: ITemplatePayload;
-}
-export interface ITemplatePayload {
+}export interface ITemplatePayload {
     readonly partNumber: string;
     readonly bodySide: string;
     readonly images: {
@@ -56,4 +59,12 @@ export interface ITemplatePayload {
 export interface IPoint {
     readonly x: number | string;
     readonly y: number | string;
+}
+
+export interface ICheckImage {
+    readonly index: number;
+    readonly partNumber: string;
+    readonly ImageID: string;
+    readonly view: string;
+    readonly imageLocation: string;
 }

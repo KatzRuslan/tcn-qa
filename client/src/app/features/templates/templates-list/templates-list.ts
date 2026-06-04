@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, computed, input } from '@angular/core';
 import { SharedModule } from '@shared-module';
 import { ITemplate } from '../templates.interface';
 
@@ -11,4 +11,11 @@ import { ITemplate } from '../templates.interface';
 })
 export class TemplatesList {
     readonly vmodel = input.required<ITemplate[]>();
+    readonly expansion = input.required<boolean>();
+    readonly withImageDetails = computed(() => {
+        const [{ details }] = this.vmodel();
+        const [{ view, ImageID }] = details;
+        return !!view && !!ImageID;
+    });
+    public expandedRows: Record<string, boolean> = {};
 }
