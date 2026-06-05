@@ -2,28 +2,48 @@
     <ng-template #header>
         <tr>
             <th class="" scope="col"><div class=""><span class="">Name</span></div></th>
-            <th class="" scope="col"><div class="min-w-14rem max-w-14rem"><span class="">Region</span></div></th>
+            <th class="" scope="col"><div class=""><span class="">Region</span></div></th>
             <th class="" scope="col"><div class=""><span class="">Procedure</span></div></th>
             <th class="" scope="col"><div class=""><span class="">Classification</span></div></th>
             <th class="" scope="col"><div class=""><span class="">Manufacturer</span></div></th>
-            <th class="" scope="col"><div class="min-w-8rem"><span class="">Message</span></div></th>
+            <th class="" scope="col"><div class=""><span class="">Message</span></div></th>
             @if (expansion()) {
-              <th class="" scope="col"></th>
+                <th class="" scope="col"></th>
             }
         </tr>
     </ng-template>
     <ng-template #body let-template let-expanded="expanded">
         <tr>
-            <td class=""><div class=""><span class="">{{ template.name }}</span></div></td>
             <td class="">
-                <div class="min-w-14rem max-w-14rem w-14rem white-space-nowrap overflow-hidden text-overflow-ellipsis">
+                <div class="min-w-22rem max-w-22rem w-22rem white-space-nowrap overflow-hidden text-overflow-ellipsis" [pTooltip]="template.name" tooltipPosition="top" tooltipStyleClass="max-w-max" appTooltip>
+                    <span class="">{{ template.name }}</span>
+                </div>
+            </td>
+            <td class="">
+                <div class="min-w-10rem max-w-10rem w-10rem white-space-nowrap overflow-hidden text-overflow-ellipsis" [pTooltip]="template.anatomicalRegion" tooltipPosition="top" tooltipStyleClass="max-w-max" appTooltip>
                     <span class="">{{ template.anatomicalRegion }}</span>
                 </div>
             </td>
-            <td class=""><div class=""><span class="">{{ template.procedure }}</span></div></td>
-            <td class=""><div class=""><span class="">{{ template.classification }}</span></div></td>
-            <td class=""><div class=""><span class="">{{ template.manufacturer }}</span></div></td>
-            <td class=""><div class="min-w-8rem"><span class="">{{ template.message }}</span></div></td>
+            <td class="">
+                <div class="min-w-14rem max-w-14rem w-14rem white-space-nowrap overflow-hidden text-overflow-ellipsis" [pTooltip]="template.procedure" tooltipPosition="top" appTooltip>
+                    <span class="">{{ template.procedure }}</span>
+                </div>
+            </td>
+            <td class="">
+                <div class="min-w-6rem max-w-6rem w-6rem white-space-nowrap overflow-hidden text-overflow-ellipsis" [pTooltip]="template.classification" tooltipPosition="top" appTooltip>
+                    <span class="">{{ template.classification }}</span>
+                </div>
+            </td>
+            <td class="">
+                <div class="min-w-8rem max-w-8rem w-8rem white-space-nowrap overflow-hidden text-overflow-ellipsis" [pTooltip]="template.manufacturer" tooltipPosition="top" appTooltip>
+                    <span class="">{{ template.manufacturer }}</span>
+                </div>
+            </td>
+            <td class="">
+                <div class="min-w-6rem max-w-6rem w-6rem white-space-nowrap overflow-hidden text-overflow-ellipsis" [pTooltip]="template.message" tooltipPosition="top" appTooltip>
+                    <span class="">{{ template.message }}</span>
+                </div>
+            </td>
             @if (expansion()) {
                 <td class="">
                     <div class="">
@@ -36,7 +56,7 @@
     <ng-template #expandedrow let-template>
         <tr class="">
             <td colspan="7" class="px-0 surface-200">
-                <div class="max-h-8rem">
+                <div class="w-full overflow-hidden" [class.details-container-max-height]="template.details.length > 5">
                     <p-table [value]="template.details"  [scrollable]="true" scrollHeight="flex" class="w-full h-full">
                         <ng-template #header>
                             <tr class="">

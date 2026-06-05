@@ -8,7 +8,7 @@ import { TemplatesList } from './templates-list/templates-list';
     imports: [SharedModule, TemplatesList],
     templateUrl: './templates.html',
     styleUrl: './templates.scss',
-    host: { class: 'flex flex-column p-3 w-full h-full overfow-hidden' },
+    host: { class: 'flex flex-column w-full h-full overfow-hidden' },
 })
 export default class Templates {
     readonly store = inject(Store);

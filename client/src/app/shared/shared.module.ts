@@ -32,9 +32,9 @@ import { ColorPickerModule } from 'primeng/colorpicker';
 import { ToastModule } from 'primeng/toast';
 import { TooltipModule } from 'primeng/tooltip';
 //
-// import { SelectDirective } from './directives/select.directive';
-// import { MultiSelectDirective } from './directives/multi-select.directive';
-// import { TooltipDirective } from './directives/tooltip.directive';
+import { SelectDirective } from './directives/select.directive';
+import { MultiSelectDirective } from './directives/multi-select.directive';
+import { TooltipDirective } from './directives/tooltip.directive';
 //
 
 const modules = [
@@ -50,7 +50,7 @@ const modules = [
     DialogModule, ConfirmDialogModule, DynamicDialogModule, PopoverModule,
     ColorPickerModule, ToastModule, TooltipModule,
     //
-    // SelectDirective, MultiSelectDirective, TooltipDirective,
+    SelectDirective, MultiSelectDirective, TooltipDirective,
 ];
 
 @NgModule({

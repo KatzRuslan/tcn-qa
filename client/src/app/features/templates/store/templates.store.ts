@@ -12,6 +12,7 @@ import { ICheckImage, ITemplate, ITemplateDetail } from '../templates.interface'
 import { switchMap, pipe, finalize } from 'rxjs';
 //
 import { Store as AppStore } from '@app-store';
+import { REPORT_MOCK } from '@initial-data';
 
 export const Store = signalStore(
 	{ providedIn: 'root' },
@@ -88,6 +89,12 @@ export const Store = signalStore(
             initTemplatesStoreHelperContext({
                 httpClient: inject(HttpClient)
             });
+            const { total, faileds } = REPORT_MOCK;
+            updateState(store, '[TemplatesStore Set Total]', setTotal(total));
+            for (const failed of faileds) {
+                updateState(store, '[TemplatesStore Push Failed]', pushFailed(failed as ITemplate));
+            }
+            return;
             rxMethod<void>(
                 pipe(
                     switchMap(_ =>

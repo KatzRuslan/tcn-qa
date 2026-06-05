@@ -1,4 +1,8 @@
 {
+    "files.exclude": {
+        "**/*.spec.ts": true,
+        "node_modules": true
+    },
     "workbench.colorCustomizations": {
         "activityBar.activeBackground": "#b300b3",
         "activityBar.background": "#b300b3",

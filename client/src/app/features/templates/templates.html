@@ -1,6 +1,12 @@
-<p-tabs value="1" class="w-full h-full overflow-hidden">
+<p-tabs value="0" class="w-full h-full overflow-hidden">
     <p-tablist class="min-h-4rem">
-        <p-tab value="0">Not Found</p-tab>
+        <p-tab value="0">
+            <div class="flex align-items-center gap-3">
+                @let iconStyle = false ? 'pi-check' : 'pi-spin pi-spinner';
+                <div class=""><span class="">Not Found</span></div>
+                <div class=""><i class="pi" [class]="iconStyle"></i></div>
+            </div>
+        </p-tab>
         <p-tab value="1">No Properties</p-tab>
         <p-tab value="2">No Images</p-tab>
     </p-tablist>
