@@ -6,6 +6,9 @@ yarn-error.log
 # Build output
 dist/
 /release/
+win-unpacked/
+*.exe
+builder-debug.yml
 
 # Angular
 .angular/

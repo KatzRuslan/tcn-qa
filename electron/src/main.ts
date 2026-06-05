@@ -1,5 +1,4 @@
 import { app, BrowserWindow, Menu, ipcMain, shell, dialog } from 'electron';
-import installExtension, { REDUX_DEVTOOLS } from 'electron-devtools-installer';
 import * as path from 'node:path';
 import * as os from 'node:os';
 import * as fs from 'node:fs';
@@ -24,6 +23,7 @@ function createWindow(): void {
             preload: path.join(__dirname, 'preload.js'),
             contextIsolation: true,
             nodeIntegration: false,
+            webSecurity: false,
         },
     });
 
@@ -31,7 +31,7 @@ function createWindow(): void {
         win.loadURL('http://localhost:4208');
         win.webContents.openDevTools();
     } else {
-        win.loadFile(path.join(__dirname, '../angular/browser/index.html'));
+        win.loadFile(path.join(__dirname, 'angular/browser/index.html'));
     }
 
     const menuTemplate: Electron.MenuItemConstructorOptions[] = [
@@ -41,7 +41,7 @@ function createWindow(): void {
                 {
                     label: 'Reload',
                     accelerator: 'Ctrl+R',
-                    click: () => win.reload(),
+                    click: () => isDev ? win.reload() : win.loadFile(path.join(__dirname, 'angular/browser/index.html')),
                 },
                 {
                     label: 'Open DevTools',
@@ -63,6 +63,22 @@ function createWindow(): void {
 }
 
 
+ipcMain.handle('get-config', () => {
+    let filePath: string;
+    if (isDev) {
+        filePath = path.join(__dirname, '../../public/mocks/configs.json');
+    } else {
+        const portableDir = process.env['PORTABLE_EXECUTABLE_DIR'];
+        const nextToExe = portableDir
+            ? path.join(portableDir, 'public', 'mocks', 'configs.json')
+            : null;
+        filePath = (nextToExe && fs.existsSync(nextToExe))
+            ? nextToExe
+            : path.join(process.resourcesPath, 'configs.json');
+    }
+    return JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+});
+
 ipcMain.handle('open-excel', async (_e, buffer: ArrayBuffer) => {
     const filePath = path.join(os.tmpdir(), buildFilename());
     fs.writeFileSync(filePath, Buffer.from(buffer));
@@ -80,6 +96,7 @@ ipcMain.handle('save-excel', async (_e, buffer: ArrayBuffer) => {
 
 app.whenReady().then(async () => {
     if (isDev) {
+        const { default: installExtension, REDUX_DEVTOOLS } = await import('electron-devtools-installer');
         await installExtension(REDUX_DEVTOOLS).catch(console.error);
     }
     createWindow();

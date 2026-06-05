@@ -21,7 +21,6 @@
             "@shared-helpers/*": ["./src/app/shared/helpers/*"],
             "@shared-components/*": ["./src/app/shared/components/*"],
             "@interfaces": ["./src/app/shared/interfaces/index.ts"],
-            "@public-mocks/*": ["../public/mocks/*"],
             "@initial-data": ["./src/app/shared/initial-data/index.ts"],
             "@app-store": ["./src/app/redux/app-store/app-store.store.ts"],
             "@app-helper": ["./src/app/redux/app-store/app-store.helper.ts"],

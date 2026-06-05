@@ -12,7 +12,6 @@ import { ICheckImage, ITemplate, ITemplateDetail } from '../templates.interface'
 import { switchMap, pipe, finalize, tap } from 'rxjs';
 //
 import { Store as AppStore } from '@app-store';
-import { REPORT_MOCK } from '@initial-data';
 
 export const Store = signalStore(
 	{ providedIn: 'root' },
@@ -132,16 +131,15 @@ export const Store = signalStore(
         }
     }),
 	withHooks({
-		onInit(store) {
+		async onInit(store) {
             initTemplatesStoreHelperContext({
                 httpClient: inject(HttpClient)
             });
-            const { total, faileds } = REPORT_MOCK;
+            const { total, faileds } = await (globalThis as any).electronAPI.getConfig();
             updateState(store, '[TemplatesStore Set Total]', setTotal(total));
             for (const failed of faileds) {
                 updateState(store, '[TemplatesStore Push Failed]', pushFailed(failed as ITemplate));
             }
-            // return;
             // store.startTest();
 		},
 	}),

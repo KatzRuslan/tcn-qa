@@ -16,7 +16,7 @@
         "appId": "com.tcn.qa",
         "productName": "TCN QA",
         "directories": {
-            "output": "../release"
+            "output": ".."
         },
         "files": [
             "dist/**/*",
@@ -25,7 +25,10 @@
         ],
         "win": {
             "target": "portable"
-        }
+        },
+        "extraResources": [
+            { "from": "../public/mocks/configs.json", "to": "configs.json" }
+        ]
     },
     "devDependencies": {
         "@types/axios": "^0.14.4",
