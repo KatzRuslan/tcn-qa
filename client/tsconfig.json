@@ -19,10 +19,15 @@
             "@environments": ["./src/environments/environment"],
             "@shared-module": ["./src/app/shared/shared.module.ts"],
             "@shared-helpers/*": ["./src/app/shared/helpers/*"],
+            "@shared-components/*": ["./src/app/shared/components/*"],
+            "@interfaces": ["./src/app/shared/interfaces/index.ts"],
+            "@public-mocks/*": ["../public/mocks/*"],
+            "@initial-data": ["./src/app/shared/initial-data/index.ts"],
             "@app-store": ["./src/app/redux/app-store/app-store.store.ts"],
             "@app-helper": ["./src/app/redux/app-store/app-store.helper.ts"],
             "@settings-store": ["./src/app/redux/settings-store/settings-store.store.ts"],
             "@settings-helper": ["./src/app/redux/settings-store/settings-store.helper.ts"],
+            "@templates-right": ["./src/app/features/templates/templates-right/templates-right.ts"]
         }
     },
     "angularCompilerOptions": {

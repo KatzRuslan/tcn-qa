@@ -12,12 +12,12 @@
         "printWidth": 100,
         "singleQuote": true,
         "overrides": [
-        {
-            "files": "*.html",
-            "options": {
-            "parser": "angular"
+            {
+                "files": "*.html",
+                "options": {
+                    "parser": "angular"
+                }
             }
-        }
         ]
     },
     "private": true,
@@ -35,6 +35,7 @@
         "@primeuix/themes": "^2.0.2",
         "@types/lodash": "^4.17.24",
         "dayjs": "^1.11.20",
+        "exceljs": "^4.4.0",
         "lodash": "^4.18.1",
         "primeflex": "^4.0.0",
         "primeicons": "^7.0.0",

@@ -18,6 +18,7 @@ export interface ITemplateIssue {
 }
 export interface ITemplateDetail {
     readonly index: number;
+    readonly implantId: string;
     readonly ImageID?: string;
     readonly view?: string;
     readonly partNumber: string;
@@ -36,7 +37,8 @@ export interface ITemplateImplant {
     readonly id: string;
     readonly familyId: string;
     readonly payload: ITemplatePayload;
-}export interface ITemplatePayload {
+}
+export interface ITemplatePayload {
     readonly partNumber: string;
     readonly bodySide: string;
     readonly images: {
@@ -63,6 +65,7 @@ export interface IPoint {
 
 export interface ICheckImage {
     readonly index: number;
+    readonly implantId: string;
     readonly partNumber: string;
     readonly ImageID: string;
     readonly view: string;

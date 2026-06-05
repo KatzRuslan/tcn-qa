@@ -1,23 +1,46 @@
-<p-tabs value="0" class="w-full h-full overflow-hidden">
+@let inproccesIcon = 'pi-spin pi-spinner';
+@let successIcon = 'pi-check';
+@let templateIconStyle = store.process().templates.total == 0 ? '' : (store.process().templates.total == store.process().templates.current ? successIcon : inproccesIcon);
+@let imagesIconStyle = store.process().images.total == 0 ? '' : (store.process().images.total == store.process().images.current ? successIcon : inproccesIcon);
+
+<p-tabs #tabs value="0" class="w-full h-full overflow-hidden">
     <p-tablist class="min-h-4rem">
         <p-tab value="0">
             <div class="flex align-items-center gap-3">
-                @let iconStyle = false ? 'pi-check' : 'pi-spin pi-spinner';
                 <div class=""><span class="">Not Found</span></div>
-                <div class=""><i class="pi" [class]="iconStyle"></i></div>
+                <div class="w-2rem"><i class="pi" [class]="templateIconStyle"></i></div>
             </div>
         </p-tab>
-        <p-tab value="1">No Properties</p-tab>
-        <p-tab value="2">No Images</p-tab>
+        <p-tab value="1">
+            <div class="flex align-items-center gap-3">
+                <div class=""><span class="">No Properties</span></div>
+                <div class="w-2rem"><i class="pi" [class]="templateIconStyle"></i></div>
+            </div>
+        </p-tab>
+        <p-tab value="2">
+            <div class="flex align-items-center gap-3">
+                <div class=""><span class="">No Images</span></div>
+                <div class="w-2rem"><i class="pi" [class]="imagesIconStyle"></i></div>
+            </div>
+        </p-tab>
     </p-tablist>
     <p-tabpanels class="flex flex-column w-full h-full overflow-hidden">
-        <p-tabpanel value="0" class="w-full h-full overflow-hidden">
+        <p-tabpanel value="0" class="flex-column w-full h-full overflow-hidden" [class.flex]="tabs.value()==0">
+            <div class="h-3rem">
+                <progressbar [vmodel]="store.process().templates" />
+            </div>
             <templates-list [vmodel]="store.notfounds()" [expansion]="false" />
         </p-tabpanel>
-        <p-tabpanel value="1" class="w-full h-full overflow-hidden">
+        <p-tabpanel value="1" class="flex-column w-full h-full overflow-hidden" [class.flex]="tabs.value()==1">
+            <div class="h-3rem">
+                <progressbar [vmodel]="store.process().templates" />
+            </div>
             <templates-list [vmodel]="store.noproperties()" [expansion]="true" />
         </p-tabpanel>
-        <p-tabpanel value="2" class="w-full h-full overflow-hidden">
+        <p-tabpanel value="2" class="flex-column w-full h-full overflow-hidden" [class.flex]="tabs.value()==2">
+            <div class="h-3rem">
+                <progressbar [vmodel]="store.process().images" />
+            </div>
             <templates-list [vmodel]="store.noimages()" [expansion]="true" />
         </p-tabpanel>
     </p-tabpanels>

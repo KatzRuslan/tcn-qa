@@ -15,12 +15,14 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { ButtonModule } from 'primeng/button';
 import { SelectButtonModule } from 'primeng/selectbutton';
+import { SplitButtonModule } from 'primeng/splitbutton';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import { AccordionModule } from 'primeng/accordion';
 import { TabsModule } from 'primeng/tabs';
 import { CarouselModule } from 'primeng/carousel';
 import { TableModule } from 'primeng/table';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { ProgressBarModule } from 'primeng/progressbar';
 import { DialogModule } from 'primeng/dialog';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { DynamicDialogModule } from 'primeng/dynamicdialog';
@@ -44,8 +46,8 @@ const modules = [
     InputTextModule, InputNumberModule, TextareaModule,
     SelectModule, MultiSelectModule, DatePickerModule,
     CheckboxModule, RadioButtonModule,
-    ButtonModule, SelectButtonModule, ToggleSwitchModule,
-    AccordionModule, TabsModule, CarouselModule, TableModule, ProgressSpinnerModule,
+    ButtonModule, SelectButtonModule, SplitButtonModule, ToggleSwitchModule,
+    AccordionModule, TabsModule, CarouselModule, TableModule, ProgressSpinnerModule, ProgressBarModule,
     MenuModule, PanelMenuModule, ContextMenuModule,
     DialogModule, ConfirmDialogModule, DynamicDialogModule, PopoverModule,
     ColorPickerModule, ToastModule, TooltipModule,

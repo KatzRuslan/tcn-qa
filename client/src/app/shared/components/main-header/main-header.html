@@ -1,0 +1,12 @@
+<div class="" [class]="widthClass()"></div>
+<div class="flex-grow-1"><span class="">{{store.currentState().header}}</span></div>
+<div class="flex justify-content-end align-items-center" [class]="widthClass()">
+    @switch (store.currentState().state) {
+        @case ('templates') {
+            <templates-right />
+        }
+        @default {
+
+        }
+    }
+</div>

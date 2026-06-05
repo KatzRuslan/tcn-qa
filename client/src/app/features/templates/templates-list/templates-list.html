@@ -60,24 +60,26 @@
                     <p-table [value]="template.details"  [scrollable]="true" scrollHeight="flex" class="w-full h-full">
                         <ng-template #header>
                             <tr class="">
-                                <th class="w-12rem surface-200" scope="col"><div class=""><span class="">Index</span></div></th>
+                                <th class="w-20rem surface-200" scope="col"><div class=""><span class="">Implant ID</span></div></th>
                                 <th class="w-20rem surface-200" scope="col"><div class=""><span class="">Part Number</span></div></th>
                                 @if (withImageDetails()) {
                                     <th class="w-16rem surface-200" scope="col"><div class=""><span class="">Image ID</span></div></th>
                                     <th class="w-12rem surface-200" scope="col"><div class=""><span class="">View</span></div></th>
                                 }
+                                <th class="w-12rem surface-200" scope="col"><div class=""><span class="">Index</span></div></th>
                                 <th class="surface-200" scope="col"></th>
                             </tr>
                         </ng-template>
                         <ng-template #body let-detail  let-rowIndex="rowIndex">
                             @let last = rowIndex === template.details.length - 1;
                             <tr class="">
-                                <td class="w-12rem surface-200" [class.border-bottom-none]="last"><div class=""><span class="">{{ detail.index }}</span></div></td>
+                                <td class="w-20rem surface-200" [class.border-bottom-none]="last"><div class=""><span class="">{{ detail.implantId }}</span></div></td>
                                 <td class="w-20rem surface-200" [class.border-bottom-none]="last"><div class=""><span class="">{{ detail.partNumber }}</span></div></td>
                                 @if (withImageDetails()) {
                                     <td class="w-16rem surface-200" [class.border-bottom-none]="last"><div class=""><span class="">{{ detail.ImageID }}</span></div></td>
                                     <td class="w-12rem surface-200" [class.border-bottom-none]="last"><div class=""><span class="">{{ detail.view }}</span></div></td>
                                 }
+                                <td class="w-12rem surface-200" [class.border-bottom-none]="last"><div class=""><span class="">{{ detail.index }}</span></div></td>
                                 <td class="surface-200" [class.border-bottom-none]="last"></td>
                             </tr>
                         </ng-template>

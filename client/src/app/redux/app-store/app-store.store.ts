@@ -2,7 +2,7 @@ import { Injector, computed, runInInjectionContext, inject } from '@angular/core
 import { signalStore, withState, withProps, withMethods, withComputed, withHooks } from '@ngrx/signals';
 import { updateState, withDevtools } from '@angular-architects/ngrx-toolkit';
 import { initialAppStoreSlice } from './app-store.slice';
-import { putAuthorization } from './app-store.updates';
+import { putAuthorization, onNavigationChange } from './app-store.updates';
 import { vmBaseUrl } from './app-store.vm-builder';
 //
 import { Store as SettingsStore } from '@settings-store';
@@ -25,7 +25,8 @@ export const Store = signalStore(
 	}),
 	withMethods(store => {
         return {
-            putAuthorization: (authorization: string) => updateState(store, '', putAuthorization(authorization))
+            putAuthorization: (authorization: string) => updateState(store, '[App Store] Put Authorization', putAuthorization(authorization)),
+            onNavigation: (state: string, header: string) => updateState(store, '[App Store] On Navigation Change', onNavigationChange(state, header)),
         };
     }),
 	withComputed(store => {
