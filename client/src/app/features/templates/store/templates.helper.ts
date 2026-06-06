@@ -24,6 +24,7 @@ export function initTemplatesStoreHelperContext(context: IContext) {
 export function getTemplates() {
     return ctx.httpClient.post<ITemplate[]>('templates/search', { freeText: '', procedures: [], anatomicalRegions: [], sortFactor: 0 }).pipe(
         map(templates => {
+            console.log(templates)
             if (Array.isArray(templates)) {
                 return templates.map(template => ({ ...template, issues: [], details: [] }));
             }

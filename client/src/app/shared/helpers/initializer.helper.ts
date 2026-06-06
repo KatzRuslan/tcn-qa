@@ -17,7 +17,7 @@ export async function load() {
         environment.production = false;
         settingsStore.putServerUrl(config.serverUrl);
     }
-    const jwt = config.jwt ?? await fetch(settingsStore.tokenUri()).then(res => res.text()).then(token => `Bearer ${token}`);
+    const jwt = config.jwt ? config.jwt : await fetch(settingsStore.tokenUri()).then(res => res.text()).then(token => `Bearer ${token}`);
     appStore.putAuthorization(jwt);
     return true;
 }

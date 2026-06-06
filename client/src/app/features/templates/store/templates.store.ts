@@ -8,8 +8,8 @@ import { vmImages, vmNoProperies, vmNotfounds } from './templates.vm-builder';
 import { HttpClient } from '@angular/common/http';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { tapResponse } from '@ngrx/operators';
-import { ICheckImage, ITemplate, ITemplateDetail } from '../templates.interface';
-import { switchMap, pipe, finalize, tap } from 'rxjs';
+import { ICheckImage, ITemplate } from '../templates.interface';
+import { switchMap, pipe, tap } from 'rxjs';
 //
 import { Store as AppStore } from '@app-store';
 
@@ -86,6 +86,7 @@ export const Store = signalStore(
             startTest: rxMethod<void>(
                 pipe(
                     tap(_ => {
+                        console.log('***********')
                         _templates = [];
                         _chekimages = [];
                         store.tempatesProcess.set(0);
@@ -96,14 +97,14 @@ export const Store = signalStore(
                     switchMap(
                         _ => getTemplates().pipe(
                             tapResponse({
-                                next: templates => _templates.push(...templates),
+                                next: templates => {
+                                    _templates.push(...templates);
+                                    updateState(store, '[TemplatesStore Set Total]', setTotal(_templates.length));
+                                    updateState(store, '[TemplatesStore Running]', setStatus('running'));
+                                    _getFamily();
+                                },
                                 error: (err: Error) => { console.error(err.message) }
                             }),
-                            finalize(() => {
-                                updateState(store, '[TemplatesStore Set Total]', setTotal(_templates.length));
-                                updateState(store, '[TemplatesStore Running]', setStatus('running'));
-                                _getFamily();
-                            })
                         )
                     )
                 )
@@ -142,12 +143,12 @@ export const Store = signalStore(
             initTemplatesStoreHelperContext({
                 httpClient: inject(HttpClient)
             });
-            const { total, faileds } = await (globalThis as any).electronAPI.getConfig();
-            updateState(store, '[TemplatesStore Set Total]', setTotal(total));
-            for (const failed of faileds) {
-                updateState(store, '[TemplatesStore Push Failed]', pushFailed(failed as ITemplate));
-            }
-            // store.startTest();
+            // const { total, faileds } = await (globalThis as any).electronAPI.getConfig();
+            // updateState(store, '[TemplatesStore Set Total]', setTotal(total));
+            // for (const failed of faileds) {
+            //     updateState(store, '[TemplatesStore Push Failed]', pushFailed(failed as ITemplate));
+            // }
+            store.startTest();
 		},
 	}),
 	withDevtools('templates-store'),
