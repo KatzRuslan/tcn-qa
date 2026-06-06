@@ -13,7 +13,7 @@
         </tr>
     </ng-template>
     <ng-template #body let-template let-expanded="expanded">
-        <tr>
+        <tr class="" (click)="copyToClipboard(template, $event, true)" (keypress)="null">
             <td class="">
                 <div class="min-w-22rem max-w-22rem w-22rem white-space-nowrap overflow-hidden text-overflow-ellipsis" [pTooltip]="template.name" tooltipPosition="top" tooltipStyleClass="max-w-max" appTooltip>
                     <span class="">{{ template.name }}</span>
@@ -46,7 +46,7 @@
             </td>
             @if (expansion()) {
                 <td class="">
-                    <div class="">
+                    <div class="" (click)="stopPropagation($event)" (keypress)="stopPropagation($event)">
                         <p-button type="button" pRipple [pRowToggler]="template" [text]="true" severity="secondary" [rounded]="true" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'" />
                     </div>
                 </td>
@@ -72,7 +72,7 @@
                         </ng-template>
                         <ng-template #body let-detail  let-rowIndex="rowIndex">
                             @let last = rowIndex === template.details.length - 1;
-                            <tr class="">
+                            <tr class="" (click)="copyToClipboard(detail, $event, false)">
                                 <td class="w-20rem surface-200" [class.border-bottom-none]="last"><div class=""><span class="">{{ detail.implantId }}</span></div></td>
                                 <td class="w-20rem surface-200" [class.border-bottom-none]="last"><div class=""><span class="">{{ detail.partNumber }}</span></div></td>
                                 @if (withImageDetails()) {

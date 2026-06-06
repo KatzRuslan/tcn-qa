@@ -77,24 +77,6 @@ export function checkImages(images: ICheckImage[]) {
         })
     );
 }
-function getCsv(data: Record<string, any>[]): string {
-    if (!data.length) return '';
-    const headers = Object.keys(data[0]);
-    const rows = data.map(row =>
-        headers.map(h => JSON.stringify(row[h] ?? '')).join(',')
-    );
-    return [headers.join(','), ...rows].join('\n');
-}
-export function saveCsv(data: Record<string, any>[], filename = 'export.csv') {
-    const csv = getCsv(data);
-    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = filename;
-    a.click();
-    URL.revokeObjectURL(url);
-}
 //
 const columnsTemplate = [
     { header: 'Family Name', key: 'name', width: 60 },

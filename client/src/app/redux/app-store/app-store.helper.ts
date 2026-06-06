@@ -20,7 +20,6 @@ export function initAppStoreHelperContext(context: IContext) {
     ctx = context;
 }
 export function showToastMessages(messages: IToastMessage[]) {
-    console.log(messages)
     for (const { detail, severity, life, styleClass } of messages) {
         ctx.messageService.add({
             detail: detail ?? '',
@@ -31,3 +30,14 @@ export function showToastMessages(messages: IToastMessage[]) {
     }
 }
 export function showConfirmDialog() {}
+export function copyToClipboard(copy: string, detail: string) {
+    navigator
+        .clipboard.writeText(copy)
+        .then(() => showToastMessages([{
+            detail: `"${detail}" was copied to clipboard`, severity: 'success'
+        }]));
+}
+export function stopPropagation(event: Event) {
+    event.stopPropagation();
+    document.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+}

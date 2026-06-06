@@ -19,7 +19,7 @@ export interface IConfirmDialog {
 }
 export interface IToastMessage {
     detail: string;
-    life: number;
-    severity: string;
-    styleClass: string;
+    life?: number;
+    severity?: string;
+    styleClass?: string;
 }
