@@ -104,16 +104,29 @@ const columnsTemplate = [
     { header: 'Classification', key: 'classification', width: 20 },
     { header: 'Manufacturer', key: 'manufacturer', width: 20 },
 ];
+const evenFill = 'FFFFFFFF';
+const oddFill = 'FFE6E6E6';
 const headerFont = { bold: true, color: { argb: 'FFFFFFFF' } };
 const headerFill: ExcelJS.FillPattern = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF4472C4' } };
+const rowBorder: Partial<ExcelJS.Borders> = {
+    top: { style: 'thin', color: { argb: 'FFA6A6A6' } },
+    bottom: { style: 'thin', color: { argb: 'FFA6A6A6' } },
+    left: { style: 'thin', color: { argb: 'FFA6A6A6' } },
+    right: { style: 'thin', color: { argb: 'FFA6A6A6' } }
+};
 function createNotFoundTemplateSheet(workbook: ExcelJS.Workbook, faileds: ITemplate[]) {
     const sheet = workbook.addWorksheet('Not found templates');
     sheet.columns = columnsTemplate;
     sheet.getRow(1).font = headerFont;
     sheet.getRow(1).fill = headerFill;
     const rows = faileds.filter(({ issues }) => issues.some(({ status }) => status === '404'));
+    let index = 0
     for (const row of rows) {
-        sheet.addRow(row);
+        const argb = index % 2 === 0 ? evenFill : oddFill;
+        const addedRow = sheet.addRow(row);
+        addedRow.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb } };
+        addedRow.border = rowBorder;
+        index++;
     }
 }
 function createEmptyPropertiesSheet(workbook: ExcelJS.Workbook, faileds: ITemplate[]) {
@@ -127,13 +140,16 @@ function createEmptyPropertiesSheet(workbook: ExcelJS.Workbook, faileds: ITempla
     sheet.getRow(1).fill = headerFill;
     const rows = faileds
         .filter(({ issues }) => issues.some(({ status }) => status === 'EMPT_PROPS'))
-        .flatMap(({ id, name, anatomicalRegion, procedure, classification, manufacturer, details }) =>
+        .flatMap(({ id, name, anatomicalRegion, procedure, classification, manufacturer, details }, index: number) =>
             details.filter(({ status }) => status === 'EMPT_PROPS').map(
-                ({ implantId, partNumber }) => ({ id, name, anatomicalRegion, procedure, classification, manufacturer, details, implantId, partNumber })
+                ({ implantId, partNumber }) => ({ id, name, anatomicalRegion, procedure, classification, manufacturer, details, implantId, partNumber, argb: index % 2 === 0 ? evenFill : oddFill })
             )
         );
     for (const row of rows) {
-        sheet.addRow(row);
+        const { argb } = row;
+        const addedRow = sheet.addRow(row);
+        addedRow.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb } };
+        addedRow.border = rowBorder;
     }
 }
 function createNotFoundImageSheet(workbook: ExcelJS.Workbook, faileds: ITemplate[]) {
@@ -149,13 +165,16 @@ function createNotFoundImageSheet(workbook: ExcelJS.Workbook, faileds: ITemplate
     sheet.getRow(1).fill = headerFill;
     const rows = faileds
         .filter(({ issues }) => issues.some(({ status }) => status === 'IMG_404'))
-        .flatMap(({ id, name, anatomicalRegion, procedure, classification, manufacturer, details }) =>
+        .flatMap(({ id, name, anatomicalRegion, procedure, classification, manufacturer, details }, index: number) =>
             details.filter(({ status }) => status === 'IMG_404').map(
-                ({ implantId, partNumber, ImageID, view }) => ({ id, name, anatomicalRegion, procedure, classification, manufacturer, details, implantId, partNumber, ImageID, view })
+                ({ implantId, partNumber, ImageID, view }) => ({ id, name, anatomicalRegion, procedure, classification, manufacturer, details, implantId, partNumber, ImageID, view, argb: index % 2 === 0 ? evenFill : oddFill })
             )
         );
     for (const row of rows) {
-        sheet.addRow(row);
+        const { argb } = row;
+        const addedRow = sheet.addRow(row);
+        addedRow.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb } };
+        addedRow.border = rowBorder;
     }
 }
 async function getExcel(faileds: ITemplate[]): Promise<ArrayBuffer> {
