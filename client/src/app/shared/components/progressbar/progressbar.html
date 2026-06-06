@@ -1,5 +1,5 @@
 <p-progressbar [value]="percent()" />
 <div class="flex justify-content-between w-full">
-    <div class=""><span class="">{{vmodel().current}}</span></div>
-    <div class=""><span class="">{{vmodel().total}}</span></div>
+    <div class=""><span class="">{{ vmodel().current | number:'1.0-0' }}</span></div>
+    <div class=""><span class="">{{ vmodel().total | number:'1.0-0' }}</span></div>
 </div>

@@ -1,4 +1,5 @@
 import { Injector, computed, runInInjectionContext, inject } from '@angular/core';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { signalStore, withState, withProps, withMethods, withComputed, withHooks } from '@ngrx/signals';
 import { updateState, withDevtools } from '@angular-architects/ngrx-toolkit';
 import { initialAppStoreSlice } from './app-store.slice';
@@ -6,6 +7,8 @@ import { putAuthorization, onNavigationChange } from './app-store.updates';
 import { vmBaseUrl } from './app-store.vm-builder';
 //
 import { Store as SettingsStore } from '@settings-store';
+import { initAppStoreHelperContext, showToastMessages } from '@app-helper';
+import { IToastMessage } from '@interfaces';
 
 export const Store = signalStore(
 	{ providedIn: 'root' },
@@ -27,6 +30,7 @@ export const Store = signalStore(
         return {
             putAuthorization: (authorization: string) => updateState(store, '[App Store] Put Authorization', putAuthorization(authorization)),
             onNavigation: (state: string, header: string) => updateState(store, '[App Store] On Navigation Change', onNavigationChange(state, header)),
+            showToastMessages: (messages: IToastMessage[]) => showToastMessages(messages),
         };
     }),
 	withComputed(store => {
@@ -37,6 +41,10 @@ export const Store = signalStore(
     }),
 	withHooks({
 		onInit(store) {
+            initAppStoreHelperContext({
+                confirmationService: inject(ConfirmationService),
+                messageService: inject(MessageService),
+            })
 		},
 	}),
 	withDevtools('app-store-store'),

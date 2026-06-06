@@ -1,4 +1,7 @@
 {
+  "jwt": "",
+  "tokenUri": "",
+  "serverUrl": "",
   "total": 3096,
   "faileds": [
     {

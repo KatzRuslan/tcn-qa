@@ -43,6 +43,9 @@ export const Store = signalStore(
             runInInjectionContext(store._injector, () => {
                 checkImages(images).subscribe(({ issues, details }) => {
                     if (issues.length) {
+                        store._appStore().showToastMessages([
+                            { detail: 'Templates images check complete', severity: 'success' },
+                        ]);
                         updateState(store, '[TemplatesStore Push Failed]', pushFailed({ ...template, issues, details }));
                     }
                     store.imagesProcess.update(current => current + images.length); // nosonar (it will need to be repaired)
@@ -53,6 +56,10 @@ export const Store = signalStore(
         const _getFamily = () => {
             const template = _templates.pop();
             if (!template) {;
+                store._appStore().showToastMessages([
+                    { detail: 'Templates existence check complete', severity: 'success' },
+                    { detail: 'Templates properties check complete', severity: 'success' },
+                ]);
                 _imagesCheck();
                 return;
             }

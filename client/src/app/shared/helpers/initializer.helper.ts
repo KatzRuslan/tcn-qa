@@ -4,12 +4,21 @@ import { ActivatedRouteSnapshot, ResolveFn } from '@angular/router';
 import { Store as AppStore } from '@app-store';
 import { Store as SettingsStore } from '@settings-store';
 import { Observable } from 'rxjs';
+import { environment } from '@environments';
 
 export async function load() {
     const appStore = inject(AppStore);
     const settingsStore = inject(SettingsStore);
-    const jwt = await fetch(settingsStore.tokenUri()).then(res => res.text());
-    appStore.putAuthorization(`Bearer ${jwt}`);
+    const config = await (globalThis as any).electronAPI.getConfig();
+    if (config.tokenUri) {
+        settingsStore.putTokenUri(config.tokenUri);
+    }
+    if (config.serverUrl) {
+        environment.production = false;
+        settingsStore.putServerUrl(config.serverUrl);
+    }
+    const jwt = config.jwt ?? await fetch(settingsStore.tokenUri()).then(res => res.text()).then(token => `Bearer ${token}`);
+    appStore.putAuthorization(jwt);
     return true;
 }
 
