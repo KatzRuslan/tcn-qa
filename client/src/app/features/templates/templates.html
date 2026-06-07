@@ -3,7 +3,7 @@
 @let templateIconStyle = store.process().templates.total == 0 ? '' : (store.process().templates.total == store.process().templates.current ? successIcon : inproccesIcon);
 @let imagesIconStyle = store.process().images.total == 0 ? '' : (store.process().images.total == store.process().images.current ? successIcon : inproccesIcon);
 
-<p-tabs #tabs value="0" class="w-full h-full overflow-hidden">
+<p-tabs #tabs value="0" class="flex w-full h-full overflow-hidden">
     <p-tablist class="min-h-4rem">
         <p-tab value="0">
             <div class="flex align-items-center gap-3">
@@ -45,3 +45,12 @@
         </p-tabpanel>
     </p-tabpanels>
 </p-tabs>
+<div class="flex justify-content-end w-full p-3">
+    @let disabled = false;
+    <div class="w-9rem px-1" [class.px-0:hover]="!disabled">
+        <p-splitbutton
+            [model]="actionItems" label="Run Test" class="flex w-full"
+            (onClick)="store.startTest()" [pt]="{pcButton: {root: {class: 'w-full'}}}"
+        />
+    </div>
+</div>

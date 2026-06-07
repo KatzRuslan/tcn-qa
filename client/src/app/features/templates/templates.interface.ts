@@ -71,3 +71,10 @@ export interface ICheckImage {
     readonly view: string;
     readonly imageLocation: string;
 }
+
+export interface IConfigurations {
+    readonly freeText: string;
+    readonly procedures: string[];
+    readonly anatomicalRegions: string[];
+    readonly sortFactor: number;
+}

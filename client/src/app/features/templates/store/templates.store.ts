@@ -143,12 +143,12 @@ export const Store = signalStore(
             initTemplatesStoreHelperContext({
                 httpClient: inject(HttpClient)
             });
-            // const { total, faileds } = await (globalThis as any).electronAPI.getConfig();
-            // updateState(store, '[TemplatesStore Set Total]', setTotal(total));
-            // for (const failed of faileds) {
-            //     updateState(store, '[TemplatesStore Push Failed]', pushFailed(failed as ITemplate));
-            // }
-            store.startTest();
+            const { total, faileds } = await (globalThis as any).electronAPI.getConfig();
+            updateState(store, '[TemplatesStore Set Total]', setTotal(total));
+            for (const failed of faileds) {
+                updateState(store, '[TemplatesStore Push Failed]', pushFailed(failed as ITemplate));
+            }
+            // store.startTest();
 		},
 	}),
 	withDevtools('templates-store'),

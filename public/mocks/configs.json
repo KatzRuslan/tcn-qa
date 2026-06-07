@@ -2,6 +2,10 @@
   "jwt": "",
   "tokenUri": "",
   "serverUrl": "",
+  "templateConfigurations": {
+    "procedures": [],
+    "anatomicalRegions": []
+  },
   "total": 3096,
   "faileds": [
     {
