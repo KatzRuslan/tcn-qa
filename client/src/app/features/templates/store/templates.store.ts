@@ -3,12 +3,12 @@ import { signalStore, withState, withProps, withMethods, withComputed, withHooks
 import { updateState, withDevtools } from '@angular-architects/ngrx-toolkit';
 import { initialTemplatesSlice } from './templates.slice';
 import { getTemplates, getFamily, checkImages, initTemplatesStoreHelperContext, viewExcel, saveExcel } from './templates.helper';
-import { setTotal, pushFailed, setStatus } from './templates.updates';
+import { setTotal, pushFailed, setStatus, initStore, putConfigurations, clearFaileds } from './templates.updates';
 import { vmImages, vmNoProperies, vmNotfounds } from './templates.vm-builder';
 import { HttpClient } from '@angular/common/http';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { tapResponse } from '@ngrx/operators';
-import { ICheckImage, ITemplate } from '../templates.interface';
+import { ICheckImage, IConfigurations, ITemplate } from '../templates.interface';
 import { switchMap, pipe, tap } from 'rxjs';
 //
 import { Store as AppStore } from '@app-store';
@@ -21,6 +21,7 @@ export const Store = signalStore(
         let appStore: InstanceType<typeof AppStore> | null = null;
 		return {
 			_injector: injector,
+            httpClient: inject(HttpClient),
             _appStore: (): any => {
                 appStore ??= runInInjectionContext(injector, () => inject(AppStore));
                 return appStore;
@@ -37,15 +38,15 @@ export const Store = signalStore(
             if (_chekimages.length === 0) {
                 store.imagesProcess.set(store.imagesTotal());
                 updateState(store, '[TemplatesStore Done]', setStatus('done'));
+                store._appStore().showToastMessages([
+                    { detail: 'Templates images check complete', severity: 'success' },
+                ]);
                 return;
             }
             const { template, images } = _chekimages.pop()!;
             runInInjectionContext(store._injector, () => {
                 checkImages(images).subscribe(({ issues, details }) => {
                     if (issues.length) {
-                        store._appStore().showToastMessages([
-                            { detail: 'Templates images check complete', severity: 'success' },
-                        ]);
                         updateState(store, '[TemplatesStore Push Failed]', pushFailed({ ...template, issues, details }));
                     }
                     store.imagesProcess.update(current => current + images.length); // nosonar (it will need to be repaired)
@@ -86,16 +87,15 @@ export const Store = signalStore(
             startTest: rxMethod<void>(
                 pipe(
                     tap(_ => {
-                        console.log('***********')
                         _templates = [];
                         _chekimages = [];
                         store.tempatesProcess.set(0);
                         store.imagesProcess.set(0);
                         store.imagesTotal.set(0);
-                        updateState(store, '[TemplatesStore Set Total]', setTotal(_templates.length));
+                        updateState(store, '[TemplatesStore Set Total]', setTotal(0), clearFaileds());
                     }),
                     switchMap(
-                        _ => getTemplates().pipe(
+                        _ => getTemplates(store.configurations()).pipe(
                             tapResponse({
                                 next: templates => {
                                     _templates.push(...templates);
@@ -115,6 +115,7 @@ export const Store = signalStore(
             viewExcel: () => {
                 viewExcel(store.faileds())
             },
+            putConfigurations: (configurations: IConfigurations) => updateState(store, '[TemplatesStore Put Configurations]', putConfigurations(configurations)),
             // saveJson: () => {},
             // viewCsv: () => {},
             // viewJson: () => {},
@@ -122,6 +123,10 @@ export const Store = signalStore(
     }),
 	withComputed(store => {
         return {
+            inputConfigurations: computed(() => ({
+                vmodel: store.configurations(),
+                options: store.options(),
+            })),
             notfounds: computed(() => vmNotfounds(store.faileds())),
             noproperties: computed(() => vmNoProperies(store.faileds())),
             noimages: computed(() => vmImages(store.faileds())),
@@ -140,14 +145,16 @@ export const Store = signalStore(
     }),
 	withHooks({
 		async onInit(store) {
+            const { templateConfigurations } = await (globalThis as any).electronAPI.getConfig();
+            updateState(store, '[TemplatesStore InitStore]', initStore(templateConfigurations));
             initTemplatesStoreHelperContext({
-                httpClient: inject(HttpClient)
+                httpClient: store.httpClient
             });
-            const { total, faileds } = await (globalThis as any).electronAPI.getConfig();
-            updateState(store, '[TemplatesStore Set Total]', setTotal(total));
-            for (const failed of faileds) {
-                updateState(store, '[TemplatesStore Push Failed]', pushFailed(failed as ITemplate));
-            }
+            // const { total, faileds } = await (globalThis as any).electronAPI.getConfig();
+            // updateState(store, '[TemplatesStore Set Total]', setTotal(total));
+            // for (const failed of faileds) {
+            //     updateState(store, '[TemplatesStore Push Failed]', pushFailed(failed as ITemplate));
+            // }
             // store.startTest();
 		},
 	}),

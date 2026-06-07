@@ -1,2 +1,8 @@
-<p-button label="Save" icon="pi pi-file-excel" text (onClick)="store.saveExcel()" />
-<p-button label="View" icon="pi pi-file-excel" text (onClick)="store.viewExcel()" />
+<div class="w-12rem px-1 px-0:hover">
+    <p-splitbutton
+        label="View Exvel" icon="pi pi-file-excel" size="small"
+        class="flex w-full" [pt]="{ pcButton: { root: { class: 'w-full' } } }"
+        [model]="excelActionItems"
+        (onClick)="store.viewExcel()" />
+</div>
+

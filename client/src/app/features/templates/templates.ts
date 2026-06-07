@@ -30,27 +30,14 @@ export default class Templates {
             modal: true,
             closable: true,
             draggable: true,
-            width: '30rem',
-            // inputValues: {
-            //     vmodel: structuredClone(palette), color,
-            //     checks: this.store.palettes().filter(({name}) => this.checks().includes(name)),
-            //     labels: this.store.palettes().filter(({name}) => name !== palette.name).map(({label}) => label),
-            // },
+            width: '60rem',
+            inputValues: this.store.inputConfigurations(),
         })!;
-        const subscriber = ref.onClose.subscribe((res: any) => {
+        const subscriber = ref.onClose.subscribe((configurations: any) => {
             subscriber.unsubscribe();
-            if (!res) { return }
-            console.log(res)
-            // if (name) {
-            //     this.store.putPalette(name, res)
-            // } else {
-            //     this.store.pushPalette(res);
-            // }
+            if (!configurations) { return }
+            this.store.putConfigurations(configurations);
+            this.store.startTest();
         });
-    }
-    constructor() {
-        setTimeout(() => {
-            this.openConfigurations();
-        }, 120);
     }
 }

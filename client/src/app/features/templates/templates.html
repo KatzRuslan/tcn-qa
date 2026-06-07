@@ -49,7 +49,7 @@
     @let disabled = false;
     <div class="w-9rem px-1" [class.px-0:hover]="!disabled">
         <p-splitbutton
-            [model]="actionItems" label="Run Test" class="flex w-full"
+            [model]="actionItems" label="Run Test" class="flex w-full" menuStyleClass="templates-splitbutton"
             (onClick)="store.startTest()" [pt]="{pcButton: {root: {class: 'w-full'}}}"
         />
     </div>

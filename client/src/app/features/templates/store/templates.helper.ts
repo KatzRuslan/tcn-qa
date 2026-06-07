@@ -1,6 +1,6 @@
 import { Signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { ICheckImage, ITemplate, ITemplateDetail, ITemplateIssue } from '../templates.interface';
+import { ICheckImage, IConfigurations, ITemplate, ITemplateDetail, ITemplateIssue } from '../templates.interface';
 import { catchError, throwError, map, mergeMap, from, of, toArray, filter } from 'rxjs';
 import * as ExcelJS from 'exceljs';
 
@@ -21,10 +21,9 @@ export function initTemplatesStoreHelperContext(context: IContext) {
     ctx = context;
 }
 //
-export function getTemplates() {
-    return ctx.httpClient.post<ITemplate[]>('templates/search', { freeText: '', procedures: [], anatomicalRegions: [], sortFactor: 0 }).pipe(
+export function getTemplates(configurations: IConfigurations) {
+    return ctx.httpClient.post<ITemplate[]>('templates/search', configurations).pipe(
         map(templates => {
-            console.log(templates)
             if (Array.isArray(templates)) {
                 return templates.map(template => ({ ...template, issues: [], details: [] }));
             }

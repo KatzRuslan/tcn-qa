@@ -1,1 +1,49 @@
-<p>test-configurations works!</p>
+<div class="">
+    <div class="px-2 mb-1"><span class="">Free Text</span></div>
+    <input pInputText type="text" [formField]="formGroup.freeText" placeholder="Free Text" class="w-30rem" />
+</div>
+<div class="">
+    <div class="px-2 mb-1"><span class="">Anatomical Regions</span></div>
+    <p-listbox
+        [formField]="formGroup.anatomicalRegions" [options]="anatomicalRegionsOptions()"
+        [multiple]="true" [checkbox]="true"
+        class="w-full" listStyleClass="flex-row flex-wrap"
+        [pt]="{ list: { class: 'flex-row flex-wrap' }, option: {class: 'w-3'} }"
+        scrollHeight="5.6rem">
+        <ng-template #footer>
+            <div class="flex align-items-center gap-2 px-2 py-3">
+                <input #otherAanatomicalRegion pInputText type="text" class="border-200 w-20rem" placeholder="Other Anatomical Region" size="small" />
+                <p-button
+                    [raised]="true" icon="pi pi-plus" variant="outlined" size="small" styleClass="border-200"
+                    (onClick)="addOtherAnatomicalRegion(otherAanatomicalRegion)"
+                    [disabled]="otherAanatomicalRegion.value.length==0"
+                />
+            </div>
+        </ng-template>
+    </p-listbox>
+</div>
+<div class="">
+    <div class="px-2 mb-1"><span class="">Procedures</span></div>
+    <p-listbox
+        [formField]="formGroup.procedures" [options]="proceduresOptions()"
+        [multiple]="true" [checkbox]="true"
+        class="w-full" listStyleClass="flex-row flex-wrap"
+        [pt]="{ list: { class: 'flex-row flex-wrap' }, option: {class: 'w-4'} }"
+        scrollHeight="5.6rem">
+        <ng-template #footer>
+            <div class="flex align-items-center gap-2 px-2 py-3">
+                <input #otherProcedure pInputText type="text" class="border-200 w-20rem" placeholder="Other Procedure" size="small" />
+                <p-button
+                    [raised]="true" icon="pi pi-plus" variant="outlined" size="small" styleClass="border-200"
+                    (onClick)="addOtherProcedure(otherProcedure)"
+                    [disabled]="otherProcedure.value.length==0"
+                />
+            </div>
+        </ng-template>
+    </p-listbox>
+</div>
+<div class="flex justify-content-center gap-3 mt-4">
+    @let disabled = formGroup().invalid();
+    <div class="w-10rem px-1 px-0:hover"><p-button label="Cancel" [text]="true" (onClick)="onCancel()" styleClass="w-full" /></div>
+    <div class="w-10rem px-1" [class.px-0:hover]="!disabled"><p-button label="Submit" [rounded]="true" (onClick)="onSubmit()" class="submit-button" styleClass="w-full" [class.disabled]="disabled" [disabled]="disabled" /></div>
+</div>

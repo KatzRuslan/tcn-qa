@@ -7,6 +7,10 @@ export interface ITemplatesSlice {
     readonly faileds: ITemplate[];
     readonly status: TStatus;
     readonly configurations: IConfigurations;
+    readonly options: {
+        readonly procedures: string[];
+        readonly anatomicalRegions: string[];
+    }
 };
 
 export const initialTemplatesSlice: ITemplatesSlice = {
@@ -18,5 +22,9 @@ export const initialTemplatesSlice: ITemplatesSlice = {
         procedures: [],
         anatomicalRegions: [],
         sortFactor: 0
+    },
+    options: {
+        procedures: [],
+        anatomicalRegions: [],
     },
 };

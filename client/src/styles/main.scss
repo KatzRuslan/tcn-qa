@@ -13,4 +13,8 @@ html {
 }
 body {
     color: var(--p-surface-100);
+    --p-tieredmenu-background: var(--p-breeze-400);
+    --p-tieredmenu-item-focus-background: var(--p-breeze-500);
+    --p-tieredmenu-item-icon-color: var(--p-tieredmenu-item-color);
+    --p-tieredmenu-item-icon-focus-color: var(--p-tieredmenu-item-focus-color);
 }

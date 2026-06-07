@@ -10,19 +10,14 @@ import { Store } from '../store/templates.store';
 })
 export class TemplatesRight {
     readonly store = inject(Store);
-    // readonly items = [
-    //     {
-    //         label: 'Save JSON', icon: 'pi ',
-    //         command: this.store.saveJson
-    //     },
-    //     { separator: true },
-    //     {
-    //         label: 'View CSV', icon: 'pi ',
-    //         command: this.store.viewCsv
-    //     },
-    //     {
-    //         label: 'View JSON', icon: 'pi ',
-    //         command: this.store.viewJson
-    //     },
-    // ];
+    readonly excelActionItems = [
+        {
+            label: 'Save Excel', icon: 'pl-4 pi pi-file-excel',
+            command: this.store.saveExcel
+        },
+        {
+            label: 'View Excel', icon: 'pl-4 pi pi-file-excel',
+            command: this.store.viewExcel
+        },
+    ];
 }

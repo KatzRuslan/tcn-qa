@@ -3,8 +3,46 @@
   "tokenUri": "",
   "serverUrl": "",
   "templateConfigurations": {
-    "procedures": [],
-    "anatomicalRegions": []
+    "procedures": [
+      "Total Hip Replacement",
+      "Total Knee Replacement",
+      "Total Shoulder Replacement",
+      "Upper Limb",
+      "Trauma"
+    ],
+    "anatomicalRegions": [
+      "Ankle",
+      "Clavicle",
+      "DestFemur",
+      "DiaFemur",
+      "DiaHumerus",
+      "DiaTibia",
+      "DisTibia",
+      "DistFemur",
+      "DistHumerus",
+      "DistHumerusElbow",
+      "DistTibia",
+      "Elbow",
+      "Fibula",
+      "FootAnkle",
+      "HIP",
+      "Hand",
+      "Hip",
+      "Humerus",
+      "Knee",
+      "Patella",
+      "Pelvis",
+      "ProxFemur",
+      "ProxHumerus",
+      "ProxTibia",
+      "Radius",
+      "RadiusUlna",
+      "Shoulder",
+      "Skull",
+      "Spine",
+      "Ulna",
+      "Wrist"
+    ]
   },
   "total": 3096,
   "faileds": [

@@ -13,6 +13,7 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { DatePickerModule } from 'primeng/datepicker';
 import { CheckboxModule } from 'primeng/checkbox';
 import { RadioButtonModule } from 'primeng/radiobutton';
+import { ListboxModule } from 'primeng/listbox';
 import { ButtonModule } from 'primeng/button';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { SplitButtonModule } from 'primeng/splitbutton';
@@ -45,7 +46,7 @@ const modules = [
     IconFieldModule, InputIconModule, InputMaskModule,
     InputTextModule, InputNumberModule, TextareaModule,
     SelectModule, MultiSelectModule, DatePickerModule,
-    CheckboxModule, RadioButtonModule,
+    CheckboxModule, RadioButtonModule, ListboxModule,
     ButtonModule, SelectButtonModule, SplitButtonModule, ToggleSwitchModule,
     AccordionModule, TabsModule, CarouselModule, TableModule, ProgressSpinnerModule, ProgressBarModule,
     MenuModule, PanelMenuModule, ContextMenuModule,
