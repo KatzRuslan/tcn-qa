@@ -1,5 +1,5 @@
 import { environment } from '@environments';
 
 export function vmBaseUrl(serverUrl: string) {
-    return environment.production ? serverUrl : environment.serverUrl
+    return environment.production ? environment.serverUrl : serverUrl
 }

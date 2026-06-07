@@ -25,3 +25,6 @@ Thumbs.db
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+
+# Local mocks
+public/mocks/configs.json
