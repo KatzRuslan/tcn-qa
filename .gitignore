@@ -9,6 +9,7 @@ dist/
 win-unpacked/
 *.exe
 builder-debug.yml
+builder-effective-config.yaml
 
 # Angular
 .angular/
