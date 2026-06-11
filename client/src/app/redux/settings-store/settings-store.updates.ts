@@ -7,6 +7,9 @@ export function putServerUrl(serverUrl: string): PartialStateUpdater<ISettingsSt
 export function putTokenUri(tokenUri: string): PartialStateUpdater<ISettingsStoreSlice> {
 	return _ => ({ tokenUri });
 };
+export function putOwner(owner: string): PartialStateUpdater<ISettingsStoreSlice> {
+	return _ => ({ owner });
+};
 export function init(): PartialStateUpdater<ISettingsStoreSlice> {
 	return _ => ({ });
 };

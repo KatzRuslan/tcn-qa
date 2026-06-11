@@ -1,0 +1,12 @@
+:host ::ng-deep {
+    .navigation-single-item ~ .p-panelmenu-content-container {
+        display: none;
+    }
+    .p-panelmenu-item-link-active {
+        font-weight: bold;
+        color: var(--p-primary-color);
+        .p-panelmenu-header-icon {
+            color: inherit;
+        }
+    }
+}

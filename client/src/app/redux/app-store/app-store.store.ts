@@ -35,7 +35,7 @@ export const Store = signalStore(
     }),
 	withComputed(store => {
         return {
-            getHttpHeaders: computed(() => ({ authorization: store.authorization() })),
+            getHttpHeaders: computed(() => ({ authorization: store.authorization(), owner: store._settingsStore().owner() })),
             baseUrl: computed(() => vmBaseUrl(store._settingsStore().serverUrl())),
         };
     }),

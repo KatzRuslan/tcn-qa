@@ -1,0 +1,23 @@
+<p-table [value]="store.settings()" dataKey="key" [expandedRowKeys]="expandedRows" [scrollable]="true" scrollHeight="flex" class="w-full h-full">
+    <ng-template #body let-setting let-expanded="expanded">
+        <tr class="">
+            <td class=""><div class=""><span class="">{{setting.name}}</span></div></td>
+            <td class=""><div class=""><span class="">{{setting.key}}</span></div></td>
+            <td class="w-4rem"><div class="">
+                <p-button icon="pi pi-trash" [rounded]="true" [outlined]="true" severity="secondary" (onClick)="store.removeSetting(setting.key)" />
+            </div></td>
+            <td class="w-4rem">
+                <div class="">
+                    <p-button type="button" pRipple [pRowToggler]="setting" [text]="true" [rounded]="true" severity="secondary" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'" />
+                </div>
+            </td>
+        </tr>
+    </ng-template>
+    <ng-template #expandedrow let-setting>
+        <tr class="surface-200">
+            <td class="" colspan="4">
+                <div class=""><pre>{{setting.value | json}}</pre></div>
+            </td>
+        </tr>
+    </ng-template>
+</p-table>

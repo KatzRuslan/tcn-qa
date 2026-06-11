@@ -1,4 +1,4 @@
-import { Injector, computed, runInInjectionContext, inject, signal } from '@angular/core';
+import { Injector, signal, computed, runInInjectionContext, inject } from '@angular/core';
 import { signalStore, withState, withProps, withMethods, withComputed, withHooks } from '@ngrx/signals';
 import { updateState, withDevtools } from '@angular-architects/ngrx-toolkit';
 import { initialTemplatesSlice } from './templates.slice';
