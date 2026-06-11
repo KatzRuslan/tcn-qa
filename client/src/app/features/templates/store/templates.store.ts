@@ -110,10 +110,10 @@ export const Store = signalStore(
                 )
             ),
             saveExcel: () => {
-                saveExcel(store.faileds())
+                saveExcel(store.faileds(), store.total(), store.imagesTotal());
             },
             viewExcel: () => {
-                viewExcel(store.faileds())
+                viewExcel(store.faileds(), store.total(), store.imagesTotal());
             },
             putConfigurations: (configurations: IConfigurations) => updateState(store, '[TemplatesStore Put Configurations]', putConfigurations(configurations)),
             // saveJson: () => {},
@@ -150,7 +150,8 @@ export const Store = signalStore(
             initTemplatesStoreHelperContext({
                 httpClient: store.httpClient
             });
-            // const { total, faileds } = await (globalThis as any).electronAPI.getConfig();
+            // const { total, totalImages, faileds } = await (globalThis as any).electronAPI.getConfig();
+            // store.imagesTotal.set(totalImages);
             // updateState(store, '[TemplatesStore Set Total]', setTotal(total));
             // for (const failed of faileds) {
             //     updateState(store, '[TemplatesStore Push Failed]', pushFailed(failed as ITemplate));

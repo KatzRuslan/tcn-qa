@@ -110,6 +110,7 @@ function createNotFoundTemplateSheet(workbook: ExcelJS.Workbook, faileds: ITempl
         addedRow.border = rowBorder;
         index++;
     }
+    return rows.length;
 }
 function createEmptyPropertiesSheet(workbook: ExcelJS.Workbook, faileds: ITemplate[]) {
     const sheet = workbook.addWorksheet('Empty property templates');
@@ -133,6 +134,32 @@ function createEmptyPropertiesSheet(workbook: ExcelJS.Workbook, faileds: ITempla
         addedRow.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb } };
         addedRow.border = rowBorder;
     }
+}
+function createEmptyPropertiesTotalSheet(workbook: ExcelJS.Workbook, faileds: ITemplate[]) {
+    const sheet = workbook.addWorksheet('Total empty property templates');
+    sheet.columns = [
+        ...columnsTemplate,
+        { header: 'Status', key: 'message', width: 20 },
+    ];
+    sheet.getRow(1).font = headerFont;
+    sheet.getRow(1).fill = headerFill;
+    const rows = faileds
+        .filter(({ issues }) => issues.some(({ status }) => status === 'EMPT_PROPS'))
+        .map(({ id, name, anatomicalRegion, procedure, classification, manufacturer, issues }, index: number) => {
+            const { message } = issues.find(({ status }) => status === 'EMPT_PROPS')!;
+            return {
+                id, name, anatomicalRegion, procedure,
+                classification, manufacturer, message,
+                argb: index % 2 === 0 ? evenFill : oddFill
+            }
+        });
+    for (const row of rows) {
+        const { argb } = row;
+        const addedRow = sheet.addRow(row);
+        addedRow.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb } };
+        addedRow.border = rowBorder;
+    }
+    return rows.length;
 }
 function createNotFoundImageSheet(workbook: ExcelJS.Workbook, faileds: ITemplate[]) {
     const sheet = workbook.addWorksheet('Not found images');
@@ -159,18 +186,59 @@ function createNotFoundImageSheet(workbook: ExcelJS.Workbook, faileds: ITemplate
         addedRow.border = rowBorder;
     }
 }
-async function getExcel(faileds: ITemplate[]): Promise<ArrayBuffer> {
+function createNotFoundImageTotalSheet(workbook: ExcelJS.Workbook, faileds: ITemplate[]) {
+    const sheet = workbook.addWorksheet('Total not found images');
+    sheet.columns = [
+        ...columnsTemplate,
+        { header: 'Status', key: 'message', width: 20 },
+    ];
+    sheet.getRow(1).font = headerFont;
+    sheet.getRow(1).fill = headerFill;
+    let totalImages = 0;
+    const rows = faileds
+        .filter(({ issues }) => issues.some(({ status }) => status === 'IMG_404'))
+        .map(({ id, name, anatomicalRegion, procedure, classification, manufacturer, details , issues }, index: number) => {
+            const { message } = issues.find(({ status }) => status === 'IMG_404')!;
+            totalImages = totalImages + details.length;
+            return { id, name, anatomicalRegion, procedure, classification, manufacturer, message, argb: index % 2 === 0 ? evenFill : oddFill }
+        });
+    for (const row of rows) {
+        const { argb } = row;
+        const addedRow = sheet.addRow(row);
+        addedRow.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb } };
+        addedRow.border = rowBorder;
+    }
+    return { imagesImplants: rows.length, totalImages };
+}
+function createTotalReportSheet(workbook: ExcelJS.Workbook, total: number, notFoundTemplate: number, emptyProperties: number, imagesImplants: number, totalImages: number, images: number) {
+    const sheet = workbook.addWorksheet('Total report');
+    sheet.columns = [
+        { header: '', key: 'name', width: 40 },
+        { header: '', key: 'value', width: 12 },
+        { header: '', key: 'total', width: 12 },
+    ];
+    sheet.addRow({ name: 'Templates checked', value: total });
+    sheet.addRow({ name: 'Not Found Templates', value: notFoundTemplate, total });
+    sheet.addRow({ name: 'Empty Templates', value: emptyProperties, total: total - notFoundTemplate });
+    sheet.addRow({ name: 'Not Found Image Templates', value: imagesImplants, total: total - notFoundTemplate });
+    sheet.addRow({ name: 'Not Found Images', value: totalImages, total: images });
+}
+async function getExcel(faileds: ITemplate[], total: number, images: number): Promise<ArrayBuffer> {
     const workbook = new ExcelJS.Workbook();
-    createNotFoundTemplateSheet(workbook, faileds);
+    const notFoundTemplate = createNotFoundTemplateSheet(workbook, faileds);
     createEmptyPropertiesSheet(workbook, faileds);
     createNotFoundImageSheet(workbook, faileds);
+    // Totals
+    const emptyProperties = createEmptyPropertiesTotalSheet(workbook, faileds);
+    const { imagesImplants, totalImages } = createNotFoundImageTotalSheet(workbook, faileds);
+    createTotalReportSheet(workbook, total, notFoundTemplate, emptyProperties, imagesImplants, totalImages, images);
     return workbook.xlsx.writeBuffer();
 }
-export async function viewExcel(faileds: ITemplate[]) {
-    const buffer = await getExcel(faileds);
+export async function viewExcel(faileds: ITemplate[], total: number, images: number) {
+    const buffer = await getExcel(faileds, total, images);
     (globalThis as any).electronAPI.openExcel(buffer);
 }
-export async function saveExcel(faileds: ITemplate[]) {
-    const buffer = await getExcel(faileds);
+export async function saveExcel(faileds: ITemplate[], total: number, images: number) {
+    const buffer = await getExcel(faileds, total, images);
     (globalThis as any).electronAPI.saveExcel(buffer);
 }
