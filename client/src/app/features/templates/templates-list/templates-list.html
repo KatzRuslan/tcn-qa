@@ -1,11 +1,34 @@
-<p-table [value]="vmodel()" dataKey="id" [expandedRowKeys]="expandedRows" [scrollable]="true" scrollHeight="flex" class="w-full h-full">
+<p-table #dtable
+    [value]="vmodel()"
+    [expandedRowKeys]="expandedRows" dataKey="id"
+    [globalFilterFields]="['name', 'procedure', 'classification', 'manufacturer']"
+    [scrollable]="true" scrollHeight="flex" class="w-full h-full">
+    <ng-template #caption>
+        <div class="flex">
+            <p-iconfield iconPosition="left" class="ml-auto">
+                <p-inputicon><i class="pi pi-search"></i></p-inputicon>
+                <input pInputText type="text" (input)="dtable.filterGlobal($event.target.value, 'contains')" placeholder="Search keyword" class="w-24rem" />
+            </p-iconfield>
+        </div>
+    </ng-template>
     <ng-template #header>
         <tr>
-            <th class="" scope="col"><div class=""><span class="">Name</span></div></th>
-            <th class="" scope="col"><div class=""><span class="">Region</span></div></th>
-            <th class="" scope="col"><div class=""><span class="">Procedure</span></div></th>
-            <th class="" scope="col"><div class=""><span class="">Classification</span></div></th>
-            <th class="" scope="col"><div class=""><span class="">Manufacturer</span></div></th>
+            <th class="" scope="col" pSortableColumn="name"><div class="flex align-items-center gap-3"><span class="">Name</span><p-sortIcon field="name" /></div></th>
+            <th class="" scope="col">
+                <div class="flex align-items-center gap-3">
+                    <span class="">Region</span>
+                    <p-columnFilter
+                        field="anatomicalRegion" matchMode="contains" display="menu"
+                        showMatchModes="false" showOperator="false" showClearButton="false" showApplyButton="false" showAddButton="false" >
+                        <ng-template #filter let-value let-filter="filterCallback">
+                            <p-listbox [ngModel]="value" [options]="regions()" [multiple]="true" [checkbox]="true" (onChange)="filter($event.value)" class="w-10rem" />
+                        </ng-template>
+                    </p-columnFilter>
+                </div>
+            </th>
+            <th class="" scope="col" pSortableColumn="procedure"><div class="flex align-items-center gap-3"><span class="">Procedure</span><p-sortIcon field="procedure" /></div></th>
+            <th class="" scope="col" pSortableColumn="classification"><div class="flex align-items-center gap-3"><span class="">Classification</span><p-sortIcon field="classification" /></div></th>
+            <th class="" scope="col" pSortableColumn="manufacturer"><div class="flex align-items-center gap-3"><span class="">Manufacturer</span><p-sortIcon field="manufacturer" /></div></th>
             <th class="" scope="col"><div class=""><span class="">Message</span></div></th>
             @if (expansion()) {
                 <th class="" scope="col"></th>
@@ -72,7 +95,7 @@
                         </ng-template>
                         <ng-template #body let-detail  let-rowIndex="rowIndex">
                             @let last = rowIndex === template.details.length - 1;
-                            <tr class="" (click)="copyToClipboard(detail, $event, false)">
+                            <tr class="" (click)="copyToClipboard(detail, $event, false)" (keypress)="null">
                                 <td class="w-20rem surface-200" [class.border-bottom-none]="last"><div class=""><span class="">{{ detail.implantId }}</span></div></td>
                                 <td class="w-20rem surface-200" [class.border-bottom-none]="last"><div class=""><span class="">{{ detail.partNumber }}</span></div></td>
                                 @if (withImageDetails()) {

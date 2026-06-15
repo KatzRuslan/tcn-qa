@@ -8,10 +8,11 @@ import { ITemplate, ITemplateDetail } from '../templates.interface';
     imports: [SharedModule],
     templateUrl: './templates-list.html',
     styleUrl: './templates-list.scss',
-    host: { class: 'flex flex-column p-3 w-full h-full overfow-hidden' },
+    host: { class: 'flex flex-column p-3 w-full flex-1 min-h-0 overflow-hidden' },
 })
 export class TemplatesList {
     readonly vmodel = input.required<ITemplate[]>();
+    readonly regions = input.required<string[]>();
     readonly expansion = input.required<boolean>();
     readonly withImageDetails = computed(() => {
         const [{ details }] = this.vmodel();

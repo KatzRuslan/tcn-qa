@@ -29,19 +29,19 @@
             <div class="h-3rem">
                 <progressbar [vmodel]="store.process().templates" />
             </div>
-            <templates-list [vmodel]="store.notfounds()" [expansion]="false" />
+            <templates-list [vmodel]="store.notfounds()" [regions]="store.options().anatomicalRegions" [expansion]="false" />
         </p-tabpanel>
         <p-tabpanel value="1" class="flex-column w-full h-full overflow-hidden" [class.flex]="tabs.value()==1">
             <div class="h-3rem">
                 <progressbar [vmodel]="store.process().templates" />
             </div>
-            <templates-list [vmodel]="store.noproperties()" [expansion]="true" />
+            <templates-list [vmodel]="store.noproperties()" [regions]="store.options().anatomicalRegions" [expansion]="true" />
         </p-tabpanel>
         <p-tabpanel value="2" class="flex-column w-full h-full overflow-hidden" [class.flex]="tabs.value()==2">
             <div class="h-3rem">
                 <progressbar [vmodel]="store.process().images" />
             </div>
-            <templates-list [vmodel]="store.noimages()" [expansion]="true" />
+            <templates-list [vmodel]="store.noimages()" [regions]="store.options().anatomicalRegions" [expansion]="true" />
         </p-tabpanel>
     </p-tabpanels>
 </p-tabs>
