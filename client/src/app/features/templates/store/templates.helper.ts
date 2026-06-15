@@ -219,7 +219,7 @@ function createTotalReportSheet(workbook: ExcelJS.Workbook, total: number, notFo
     ];
     sheet.addRow({ name: 'Templates checked', value: total });
     sheet.addRow({ name: 'Not Found Templates', value: notFoundTemplate, total });
-    sheet.addRow({ name: 'Empty Templates', value: emptyProperties, total: total - notFoundTemplate });
+    sheet.addRow({ name: 'Empty Property Templates', value: emptyProperties, total: total - notFoundTemplate });
     sheet.addRow({ name: 'Not Found Image Templates', value: imagesImplants, total: total - notFoundTemplate });
     sheet.addRow({ name: 'Not Found Images', value: totalImages, total: images });
 }
