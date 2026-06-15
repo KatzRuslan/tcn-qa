@@ -91,7 +91,6 @@ ipcMain.handle('save-excel', async (_e, buffer: ArrayBuffer) => {
     });
     if (!filePath) return;
     fs.writeFileSync(filePath, Buffer.from(buffer));
-    shell.openPath(filePath);
 });
 
 app.whenReady().then(async () => {
